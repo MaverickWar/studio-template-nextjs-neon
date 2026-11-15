@@ -15,4 +15,6 @@ if (!process.env.DATABASE_URL && !process.env.DATABASE_URL_UNPOOLED) {
     console.error("\nThe database wasn't changed, so nothing saved was lost. If the message above is about losing data, a table or column was removed or renamed in prisma/schema.prisma: see \"Changing the database\" in README.md.");
     process.exit(1);
   }
+  // The owner's own login (scripts/owner.mjs), once the tables exist. It never stops the build.
+  execSync("node scripts/owner.mjs", { stdio: "inherit" });
 }

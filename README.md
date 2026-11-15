@@ -21,6 +21,8 @@ The starter Universal App Studio copies when someone picks **Next.js + Neon** wh
 2. Choose **Neon**, create a database on the free plan, and connect it to this project. Vercel adds `DATABASE_URL` for you.
 3. Redeploy. The build sets up the tables (`scripts/setup-db.mjs`), so there's nothing to run by hand.
 
+**The owner's login.** When `OWNER_EMAIL` and `OWNER_PASSWORD` are set (Studio sets both and shows them in Project settings › App setup), the build also makes that account if it isn't there yet (`scripts/owner.mjs`), so the owner can sign in straight away. It never changes an account that already exists.
+
 Until a database is connected the app still builds and runs; the home page shows these steps and the sign-in button stays hidden.
 
 Optional settings: `BETTER_AUTH_SECRET` (signs sign-in cookies; without it a key made from the private database address is used) and `BETTER_AUTH_URL` (your own domain, if the app has one; Vercel's addresses already work). See `.env.example`.

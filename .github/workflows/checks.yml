@@ -5,6 +5,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: studio
+          POSTGRES_DB: app
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 3s --health-timeout 3s --health-retries 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -15,3 +24,10 @@ jobs:
       - run: npm run lint
       # No DATABASE_URL here, so this proves the app builds before a database is connected.
       - run: npm run build
+      # Then again with an empty database, the way Vercel builds it once Studio has given it one.
+      - name: Build with a database
+        run: npm run build
+        env:
+          DATABASE_URL: postgresql://postgres:studio@localhost:5432/app
+          DATABASE_URL_UNPOOLED: postgresql://postgres:studio@localhost:5432/app
+          BETTER_AUTH_SECRET: checks-only-secret-not-used-anywhere-else
